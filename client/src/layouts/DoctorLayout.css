@@ -1,0 +1,4 @@
+@import './PatientLayout.css';
+.doctor-layout { display: flex; min-height: 100vh; background: var(--bg); }
+.doctor-sidebar .sidebar-logo .logo-text { color: var(--primary); }
+.doctor-role { color: var(--accent); background: var(--primary-dark); padding: 1px 8px; border-radius: var(--radius-full); font-size: 10px; font-weight: var(--fw-bold); text-transform: uppercase; }

@@ -1,0 +1,32 @@
+.book-appointment { display: flex; flex-direction: column; min-height: calc(100vh - var(--navbar-height)); max-width: 640px; margin: 0 auto; }
+.book-header { display: flex; flex-direction: column; align-items: center; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); gap: 0.875rem; position: relative; }
+.book-close-btn { position: absolute; left: 1.25rem; top: 1.25rem; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.875rem; color: var(--text-secondary); background: var(--bg); }
+.book-header h2 { font-size: 1.0625rem; font-weight: 700; }
+.step-dots { display: flex; gap: 0.5rem; }
+.step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s; }
+.step-dot.active { background: var(--primary); width: 24px; border-radius: 4px; }
+.step-dot.done { background: var(--primary); }
+.book-content { flex: 1; padding: 1.5rem; overflow-y: auto; }
+.step-title { font-size: 1.1875rem; font-weight: 700; margin-bottom: 1.25rem; }
+.doctor-select-list { display: flex; flex-direction: column; gap: 0.625rem; }
+.doctor-select-item { display: flex; align-items: center; gap: 0.875rem; padding: 0.875rem; border: 2px solid var(--border); border-radius: var(--radius-lg); cursor: pointer; transition: all 0.2s; }
+.doctor-select-item:hover { border-color: var(--primary-100); background: var(--bg); }
+.doctor-select-item.selected { border-color: var(--primary); background: var(--primary-50); }
+.doctor-select-info { flex: 1; }
+.doctor-select-name { font-weight: 600; font-size: 0.9375rem; }
+.doctor-select-specialty { font-size: 0.8rem; color: var(--text-secondary); }
+.doctor-select-rating { font-size: 0.75rem; color: var(--text-muted); }
+.doctor-select-fee { font-size: 0.875rem; }
+.doctor-select-check { color: var(--primary); font-size: 1.25rem; }
+.time-slots-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+.time-slot-btn { padding: 0.625rem; border-radius: var(--radius-md); border: 1.5px solid var(--border); background: var(--bg); font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; }
+.time-slot-btn:hover { border-color: var(--primary); color: var(--primary); }
+.time-slot-btn.active { border-color: var(--primary); background: var(--primary); color: white; }
+.type-btn { flex: 1; padding: 0.75rem; border: 2px solid var(--border); border-radius: var(--radius-md); font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.15s; background: var(--bg); }
+.type-btn.active { border-color: var(--primary); background: var(--primary-50); color: var(--primary); }
+.summary-card { border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+.summary-section { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-light); }
+.summary-label { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; display: flex; align-items: center; gap: 0.375rem; }
+.summary-info-box { padding: 1rem 1.25rem; background: var(--info-light); border-top: 1px solid var(--border-light); }
+.book-footer { display: flex; gap: 0.75rem; padding: 1.25rem 1.5rem; border-top: 1px solid var(--border); background: var(--bg-card); }
+@media (max-width: 480px) { .time-slots-grid { grid-template-columns: repeat(3, 1fr); } }

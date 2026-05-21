@@ -1,0 +1,262 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String          @id @default(uuid())
+  email            String          @unique
+  password         String
+  name             String
+  role             Role            @default(PATIENT)
+  phone            String?
+  avatar           String?
+  isVerified       Boolean         @default(false)
+  otp              String?
+  otpExpiry        DateTime?
+  refreshToken     String?
+  resetToken       String?
+  resetTokenExpiry DateTime?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  cart             Cart?
+  doctorProfile    DoctorProfile?
+  healthRecords    HealthRecord[]
+  receivedMessages Message[]       @relation("ReceivedMessages")
+  sentMessages     Message[]       @relation("SentMessages")
+  notifications    Notification[]
+  orders           Order[]
+  patientProfile   PatientProfile?
+  reviewsGiven     Review[]        @relation("ReviewAuthor")
+  reviewsReceived  Review[]        @relation("ReviewDoctor")
+}
+
+model DoctorProfile {
+  id              String        @id @default(uuid())
+  userId          String        @unique
+  specialty       String
+  qualification   String
+  experience      Int           @default(0)
+  consultationFee Float         @default(0)
+  rating          Float         @default(0)
+  totalReviews    Int           @default(0)
+  bio             String?
+  languages       String[]      @default(["English"])
+  isAvailable     Boolean       @default(true)
+  isOnline        Boolean       @default(false)
+  availableSlots  Json?
+  hospitalName    String?
+  hospitalAddress String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  appointments    Appointment[]
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PatientProfile {
+  id                 String        @id @default(uuid())
+  userId             String        @unique
+  dateOfBirth        DateTime?
+  gender             String?
+  bloodGroup         String?
+  height             Float?
+  weight             Float?
+  allergies          String[]      @default([])
+  chronicConditions  String[]      @default([])
+  emergencyContact   String?
+  address            String?
+  languagePreference String        @default("en")
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  appointments       Appointment[]
+  user               User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Appointment {
+  id            String            @id @default(uuid())
+  patientId     String
+  doctorId      String
+  date          DateTime
+  timeSlot      String
+  type          String            @default("video")
+  status        AppointmentStatus @default(PENDING)
+  symptoms      String?
+  notes         String?
+  prescription  Json?
+  paymentStatus PaymentStatus     @default(PENDING)
+  paymentAmount Float             @default(0)
+  paymentId     String?
+  meetingLink   String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  doctor        DoctorProfile     @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  patient       PatientProfile    @relation(fields: [patientId], references: [id], onDelete: Cascade)
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  senderId   String
+  receiverId String
+  content    String
+  type       String   @default("text")
+  isRead     Boolean  @default(false)
+  roomId     String
+  createdAt  DateTime @default(now())
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  message   String
+  type      String   @default("info")
+  isRead    Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  authorId  String
+  doctorId  String
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  author    User     @relation("ReviewAuthor", fields: [authorId], references: [id])
+  doctor    User     @relation("ReviewDoctor", fields: [doctorId], references: [id])
+}
+
+model Medicine {
+  id                   String      @id @default(uuid())
+  name                 String
+  genericName          String?
+  manufacturer         String
+  price                Float
+  mrp                  Float
+  discount             Float       @default(0)
+  category             String
+  description          String?
+  dosageForm           String
+  strength             String?
+  packSize             String?
+  imageUrl             String?
+  requiresPrescription Boolean     @default(false)
+  inStock              Boolean     @default(true)
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+  cartItems            CartItem[]
+  orderItems           OrderItem[]
+}
+
+model Cart {
+  id        String     @id @default(uuid())
+  userId    String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     CartItem[]
+}
+
+model CartItem {
+  id         String   @id @default(uuid())
+  cartId     String
+  medicineId String
+  quantity   Int      @default(1)
+  createdAt  DateTime @default(now())
+  cart       Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  medicine   Medicine @relation(fields: [medicineId], references: [id])
+}
+
+model Order {
+  id              String        @id @default(uuid())
+  userId          String
+  totalAmount     Float
+  status          OrderStatus   @default(PLACED)
+  paymentStatus   PaymentStatus @default(PENDING)
+  paymentMethod   String        @default("COD")
+  paymentId       String?
+  shippingAddress String?
+  trackingNumber  String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  user            User          @relation(fields: [userId], references: [id])
+  items           OrderItem[]
+}
+
+model OrderItem {
+  id         String   @id @default(uuid())
+  orderId    String
+  medicineId String
+  quantity   Int
+  price      Float
+  medicine   Medicine @relation(fields: [medicineId], references: [id])
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+
+model HealthRecord {
+  id          String   @id @default(uuid())
+  userId      String
+  title       String
+  type        String
+  description String?
+  fileUrl     String?
+  fileName    String?
+  fileSize    Int?
+  doctorName  String?
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Pharmacy {
+  id        String   @id @default(uuid())
+  name      String
+  address   String
+  phone     String?
+  email     String?
+  rating    Float    @default(0)
+  isOpen    Boolean  @default(true)
+  openTime  String?
+  closeTime String?
+  latitude  Float?
+  longitude Float?
+  imageUrl  String?
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  PATIENT
+  DOCTOR
+  ADMIN
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  IN_PROGRESS
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum OrderStatus {
+  PLACED
+  CONFIRMED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}

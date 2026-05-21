@@ -1,0 +1,132 @@
+const fs = require('fs');
+const path = require('path');
+
+const translations = {
+  en: {
+    bookAppointment: {
+      title: "Book Appointment",
+      step1: "Select Doctor",
+      step2: "Date & Time",
+      step3: "Summary",
+      selectDoctorTitle: "Select a Doctor",
+      reviews: "reviews",
+      free: "Free",
+      selectDateTime: "Select Date & Time",
+      consultationDate: "Consultation Date",
+      timeSlot: "Time Slot",
+      consultationType: "Consultation Type",
+      videoCall: "🎥 Video Call",
+      inPerson: "🏥 In Person",
+      symptomsTitle: "Symptoms / Reason (optional)",
+      symptomsPlaceholder: "Describe your symptoms...",
+      summaryTitle: "Booking Summary",
+      summaryDoctor: "DOCTOR",
+      summaryDateTime: "DATE & TIME",
+      dateLabel: "DATE",
+      timeLabel: "TIME",
+      summaryType: "CONSULTATION TYPE",
+      videoType: "Video Consultation",
+      inPersonType: "In-Person Visit",
+      importantInfo: "ℹ️ IMPORTANT INFORMATION",
+      info1: "Please join the consultation 5 minutes before the scheduled time",
+      info2: "You will receive a confirmation email with meeting details",
+      info3: "Cancellation is free up to 2 hours before the appointment",
+      info4: "Have your medical history and current medications ready",
+      backBtn: "Back",
+      nextBtn: "Next",
+      confirmBtn: "Confirm Booking",
+      errCompleteSteps: "Please complete all steps",
+      errBookFail: "Booking failed. Please try again.",
+      successBook: "Appointment booked successfully!",
+      errSelectDoc: "Please select a doctor",
+      errSelectDateTime: "Please select date and time slot"
+    }
+  },
+  hi: {
+    bookAppointment: {
+      title: "अपॉइंटमेंट बुक करें",
+      step1: "डॉक्टर चुनें",
+      step2: "दिनांक और समय",
+      step3: "सारांश",
+      selectDoctorTitle: "एक डॉक्टर चुनें",
+      reviews: "समीक्षाएं",
+      free: "मुफ़्त",
+      selectDateTime: "दिनांक और समय चुनें",
+      consultationDate: "परामर्श की तारीख",
+      timeSlot: "समय स्लॉट",
+      consultationType: "परामर्श का प्रकार",
+      videoCall: "🎥 वीडियो कॉल",
+      inPerson: "🏥 व्यक्तिगत रूप से",
+      symptomsTitle: "लक्षण / कारण (वैकल्पिक)",
+      symptomsPlaceholder: "अपने लक्षणों का वर्णन करें...",
+      summaryTitle: "बुकिंग सारांश",
+      summaryDoctor: "डॉक्टर",
+      summaryDateTime: "दिनांक और समय",
+      dateLabel: "दिनांक",
+      timeLabel: "समय",
+      summaryType: "परामर्श का प्रकार",
+      videoType: "वीडियो परामर्श",
+      inPersonType: "व्यक्तिगत यात्रा",
+      importantInfo: "ℹ️ महत्वपूर्ण जानकारी",
+      info1: "निर्धारित समय से 5 मिनट पहले परामर्श में शामिल हों",
+      info2: "आपको मीटिंग विवरण के साथ एक पुष्टिकरण ईमेल प्राप्त होगा",
+      info3: "अपॉइंटमेंट से 2 घंटे पहले तक रद्दीकरण निःशुल्क है",
+      info4: "अपना चिकित्सा इतिहास और वर्तमान दवाएं तैयार रखें",
+      backBtn: "वापस",
+      nextBtn: "अगला",
+      confirmBtn: "बुकिंग की पुष्टि करें",
+      errCompleteSteps: "कृपया सभी चरण पूरे करें",
+      errBookFail: "बुकिंग विफल रही। कृपया पुनः प्रयास करें।",
+      successBook: "अपॉइंटमेंट सफलतापूर्वक बुक किया गया!",
+      errSelectDoc: "कृपया एक डॉक्टर चुनें",
+      errSelectDateTime: "कृपया दिनांक और समय स्लॉट चुनें"
+    }
+  },
+  pa: {
+    bookAppointment: {
+      title: "ਅਪੌਇੰਟਮੈਂਟ ਬੁੱਕ ਕਰੋ",
+      step1: "ਡਾਕਟਰ ਚੁਣੋ",
+      step2: "ਮਿਤੀ ਅਤੇ ਸਮਾਂ",
+      step3: "ਸੰਖੇਪ",
+      selectDoctorTitle: "ਇੱਕ ਡਾਕਟਰ ਚੁਣੋ",
+      reviews: "ਸਮੀਖਿਆਵਾਂ",
+      free: "ਮੁਫਤ",
+      selectDateTime: "ਮਿਤੀ ਅਤੇ ਸਮਾਂ ਚੁਣੋ",
+      consultationDate: "ਸਲਾਹ-ਮਸ਼ਵਰੇ ਦੀ ਮਿਤੀ",
+      timeSlot: "ਸਮਾਂ ਸਲਾਟ",
+      consultationType: "ਸਲਾਹ-ਮਸ਼ਵਰੇ ਦੀ ਕਿਸਮ",
+      videoCall: "🎥 ਵੀਡੀਓ ਕਾਲ",
+      inPerson: "🏥 ਵਿਅਕਤੀਗਤ ਰੂਪ ਵਿੱਚ",
+      symptomsTitle: "ਲੱਛਣ / ਕਾਰਨ (ਵਿਕਲਪਿਕ)",
+      symptomsPlaceholder: "ਆਪਣੇ ਲੱਛਣਾਂ ਦਾ ਵਰਣਨ ਕਰੋ...",
+      summaryTitle: "ਬੁਕਿੰਗ ਸੰਖੇਪ",
+      summaryDoctor: "ਡਾਕਟਰ",
+      summaryDateTime: "ਮਿਤੀ ਅਤੇ ਸਮਾਂ",
+      dateLabel: "ਮਿਤੀ",
+      timeLabel: "ਸਮਾਂ",
+      summaryType: "ਸਲਾਹ-ਮਸ਼ਵਰੇ ਦੀ ਕਿਸਮ",
+      videoType: "ਵੀਡੀਓ ਸਲਾਹ-ਮਸ਼ਵਰਾ",
+      inPersonType: "ਵਿਅਕਤੀਗਤ ਮੁਲਾਕਾਤ",
+      importantInfo: "ℹ️ ਮਹੱਤਵਪੂਰਨ ਜਾਣਕਾਰੀ",
+      info1: "ਕਿਰਪਾ ਕਰਕੇ ਨਿਰਧਾਰਤ ਸਮੇਂ ਤੋਂ 5 ਮਿੰਟ ਪਹਿਲਾਂ ਸਲਾਹ-ਮਸ਼ਵਰੇ ਵਿੱਚ ਸ਼ਾਮਲ ਹੋਵੋ",
+      info2: "ਤੁਹਾਨੂੰ ਮੀਟਿੰਗ ਦੇ ਵੇਰਵਿਆਂ ਦੇ ਨਾਲ ਇੱਕ ਪੁਸ਼ਟੀਕਰਣ ਈਮੇਲ ਪ੍ਰਾਪਤ ਹੋਵੇਗੀ",
+      info3: "ਅਪੌਇੰਟਮੈਂਟ ਤੋਂ 2 ਘੰਟੇ ਪਹਿਲਾਂ ਤੱਕ ਰੱਦ ਕਰਨਾ ਮੁਫਤ ਹੈ",
+      info4: "ਆਪਣਾ ਡਾਕਟਰੀ ਇਤਿਹਾਸ ਅਤੇ ਮੌਜੂਦਾ ਦਵਾਈਆਂ ਤਿਆਰ ਰੱਖੋ",
+      backBtn: "ਵਾਪਸ",
+      nextBtn: "ਅਗਲਾ",
+      confirmBtn: "ਬੁਕਿੰਗ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ",
+      errCompleteSteps: "ਕਿਰਪਾ ਕਰਕੇ ਸਾਰੇ ਕਦਮ ਪੂਰੇ ਕਰੋ",
+      errBookFail: "ਬੁਕਿੰਗ ਅਸਫਲ ਰਹੀ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
+      successBook: "ਅਪੌਇੰਟਮੈਂਟ ਸਫਲਤਾਪੂਰਵਕ ਬੁੱਕ ਕੀਤੀ ਗਈ!",
+      errSelectDoc: "ਕਿਰਪਾ ਕਰਕੇ ਇੱਕ ਡਾਕਟਰ ਚੁਣੋ",
+      errSelectDateTime: "ਕਿਰਪਾ ਕਰਕੇ ਮਿਤੀ ਅਤੇ ਸਮਾਂ ਸਲਾਟ ਚੁਣੋ"
+    }
+  }
+};
+
+['en', 'hi', 'pa'].forEach(lang => {
+  const p = path.join(__dirname, 'src/locales', lang, 'translation.json');
+  const data = JSON.parse(fs.readFileSync(p, 'utf8'));
+  data.patient = { ...(data.patient || {}), ...translations[lang] };
+  fs.writeFileSync(p, JSON.stringify(data, null, 2));
+});

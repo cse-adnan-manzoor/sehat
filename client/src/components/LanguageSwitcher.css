@@ -1,0 +1,37 @@
+.language-switcher {
+  display: inline-block;
+  margin-left: 1rem;
+}
+
+.lang-select {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(0,0,0,0.1);
+  background-color: rgba(255, 255, 255, 0.8);
+  font-family: inherit;
+  font-size: 0.875rem;
+  color: #333;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(5px);
+}
+
+.lang-select:hover {
+  border-color: var(--primary-color, #0D7377);
+  box-shadow: 0 2px 8px rgba(13, 115, 119, 0.15);
+}
+
+.lang-select:focus {
+  border-color: var(--primary-color, #0D7377);
+  box-shadow: 0 0 0 2px rgba(13, 115, 119, 0.2);
+}
+
+/* Dark mode compatibility if needed */
+@media (prefers-color-scheme: dark) {
+  .lang-select {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-color: rgba(255,255,255,0.2);
+    color: #eee;
+  }
+}

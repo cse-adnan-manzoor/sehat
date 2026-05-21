@@ -1,0 +1,45 @@
+.find-doctors { display: flex; flex-direction: column; gap: 1.25rem; }
+.search-bar-row { display: flex; gap: 0.75rem; align-items: center; }
+.search-bar { flex: 1; position: relative; display: flex; align-items: center; background: var(--bg-card); border: 2px solid var(--border); border-radius: var(--radius-md); padding: 0 1rem; transition: border-color 0.2s; }
+.search-bar:focus-within { border-color: var(--primary); }
+.search-icon { color: var(--text-muted); margin-right: 0.5rem; flex-shrink: 0; }
+.search-input { flex: 1; padding: 0.75rem 0; background: none; font-size: 0.9375rem; color: var(--text-primary); }
+.search-input::placeholder { color: var(--text-muted); }
+.search-clear { color: var(--text-muted); padding: 0.25rem; transition: color 0.15s; }
+.search-clear:hover { color: var(--danger); }
+
+.filters-panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; }
+.filters-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 0.75rem; }
+.toggle-switch { position: relative; width: 44px; height: 24px; display: inline-block; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-slider { position: absolute; cursor: pointer; inset: 0; background: var(--border); border-radius: 24px; transition: 0.3s; }
+.toggle-slider::before { content: ''; position: absolute; width: 18px; height: 18px; background: white; border-radius: 50%; left: 3px; bottom: 3px; transition: 0.3s; }
+.toggle-switch input:checked + .toggle-slider { background: var(--primary); }
+.toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
+
+.specialty-pills { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.25rem; -webkit-overflow-scrolling: touch; }
+.pill { padding: 0.375rem 0.875rem; border-radius: 9999px; font-size: 0.8125rem; font-weight: 500; border: 1.5px solid var(--border); background: var(--bg-card); color: var(--text-secondary); white-space: nowrap; transition: all 0.15s; cursor: pointer; }
+.pill:hover, .pill.active { border-color: var(--primary); color: var(--primary); background: var(--primary-50); }
+
+.doctors-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+.doctor-card { background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border); overflow: hidden; transition: all 0.25s; display: flex; flex-direction: column; }
+.doctor-card-top { position: relative; padding: 1.5rem 1.25rem 0.75rem; display: flex; justify-content: center; }
+.doctor-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary-50); }
+.doctor-avail-dot { position: absolute; bottom: 12px; right: calc(50% - 46px); width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; }
+.doctor-card-body { padding: 0.75rem 1.25rem 1.25rem; display: flex; flex-direction: column; gap: 0.25rem; flex: 1; }
+.doctor-card-body h3 { font-size: 0.9375rem; font-weight: 700; color: var(--text-primary); text-align: center; }
+.doc-specialty { font-size: 0.8rem; color: var(--primary); font-weight: 600; text-align: center; }
+.doc-qualification { font-size: 0.75rem; color: var(--text-secondary); text-align: center; }
+.doc-hospital { display: flex; align-items: center; gap: 0.25rem; font-size: 0.72rem; color: var(--text-muted); justify-content: center; }
+.doc-meta { display: flex; justify-content: center; gap: 1rem; margin: 0.25rem 0; }
+.doc-rating, .doc-exp { display: flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; color: var(--text-secondary); font-weight: 500; }
+.doc-fee { text-align: center; margin: 0.25rem 0; }
+.fee-free { color: var(--success); font-weight: 700; font-size: 0.9rem; }
+.fee-amount { color: var(--primary); font-weight: 700; font-size: 0.9rem; }
+.doctor-card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.5rem; }
+
+.pagination { display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 1rem 0; }
+.page-info { font-size: 0.875rem; color: var(--text-secondary); font-weight: 500; }
+
+@media (max-width: 1024px) { .doctors-grid { grid-template-columns: repeat(2, 1fr); } .filters-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .doctors-grid { grid-template-columns: 1fr; } .search-bar-row { flex-direction: column; } .filters-grid { grid-template-columns: 1fr 1fr; } }
