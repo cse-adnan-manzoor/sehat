@@ -9,7 +9,7 @@ const socketHandler = require('./socket/socketHandler');
 // CORS setup for frontend
 app.use(
   cors({
-    origin: ['http://localhost:5173', 'http://localhost:3004', 'http://localhost:3000', process.env.CLIENT_URL],
+    origin: ['http://localhost:5173', 'http://localhost:3004', 'http://localhost:3000', process.env.CLIENT_URL, 'https://sehattelmed.vercel.app'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
